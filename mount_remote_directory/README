@@ -1,0 +1,3 @@
+Add this line to ~/.bash_profile (or ~/.bashrc)
+
+alias alias_name="~/sshfs_config/mount.sh ~/sshfs_config/example_config_file"
