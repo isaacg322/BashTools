@@ -1,26 +1,6 @@
-#!/bin/bash
-if [ $# -ne 1 ]; then
-  (>&2 echo "ERROR: Please provide a fuse mount config file")
-  exit 1
-fi
-if [ ! -e $1 ]; then
-  (>&2 echo "ERROR: File does not exist: $1")
-  exit 1
-fi
-set -e
-source $1
-
-PORT=22
-if [ "x$REMOTEPORT" != "x" ]; then
-  PORT=$REMOTEPORT
-fi
-
-set -u
-FULLMOUNT=$MOUNTBASE/$MOUNTNAME
-
-set +e
-mkdir -p $FULLMOUNT
-umount -f $FULLMOUNT >& /dev/null
-set -e
-sshfs -p $PORT -oauto_cache,cache=no,reconnect,ServerAliveInterval=15,ServerAliveCountMax=3,defer_permissions,follow_symlinks -o volname=$MOUNTNAME $MUSER@$REMOTE:$REMOTELOC $FULLMOUNT
-echo "Mounted at: $FULLMOUNT"
+export MOUNTBASE=$HOME/volumes # Or whatever location for mounting the remote directory
+export MOUNTNAME=ig4_lustre_rr125 #Has to be the same name as config file
+export REMOTE=farm5 #Remote location to access. In this case this alias is enough inside the Sanger network
+export REMOTELOC=/lustre/scratch125/casm/team294rr/ig4 #Target remote directory
+export MUSER=ig4
+export REMOTEPORT=22
